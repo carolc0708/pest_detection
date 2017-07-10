@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <title>Pest Detection System</title>
+</head>
+<body>
+   <h1>
+      Pest Detection System
+   </h1>
+
+   <div class="imageContainer">
+      <img id="image" src="pest-control-solutions.png" width="640px">
+      <div id="imageProgress" style="font-size: 32px"></div>
+   </div>
+
+   <button id="shutter">Take Photo</button>
+
+   <script src="./autobahn.min.js"></script>
+   <script>
+      var session = null;
+      var image = document.getElementById("image");
+      var imageProgress = document.getElementById("imageProgress");
+
+      // the URL of the WAMP Router (Crossbar.io)
+      var wsuri;
+      if (document.location.origin == "file://") { // test in self server
+         wsuri = "ws://localhost:8080/ws"; // localhost for development
+      } 
+      else { // show in other client
+         wsuri = (document.location.protocol === "http:" ? "ws:" : "wss:") + "//" +
+                     document.location.host + "/ws"; // URL of the Crossbar.io instance this is served from
+      }
+
+      // the WAMP connection to the Router
+      //
+      var connection = new autobahn.Connection({
+         url: wsuri, // replace with URL of WAMP router if this doesn't serve the file
+         realm: "realm1"
+      });
+
+      var cameraResult = null;
+
+      var requestPhoto = function () {
+         imageProgress.innerHTML = "";
+         image.src = "please_wait.gif";
+         session.call("io.crossbar.examples.pi.camera.take_photo_n_predict").then(
+            function (res) {
+               
+               imageProgress.innerHTML = "";
+               base64image = res['base64image'];
+               
+               // need to remove the header and footer which uuencode adds
+               base64image = base64image.slice(29);
+               base64image = base64image.slice(0, -6);
+				
+               image.src = "data:image/jpg;base64," + base64image;
+
+               console.log(res['predict']);
+
+               imageProgress.innerHTML = '這是"' + res['predict'] + '"';
+
+            }, 
+            function (err) {
+               console.log("requestImage failed", err);
+               imageProgress.innerHTML = "Error getting image!";
+            }
+         );
+      };
+
+      // fired when connection is established and session attached
+      //
+      connection.onopen = function (sess, details) {
+
+         session = sess;
+
+         console.log("connected");
+
+         document.getElementById("shutter").addEventListener("click", requestPhoto);
+         //setInterval(requestPhoto, 1000);
+
+      };
+
+      // fired when connection was lost (or could not be established)
+      //
+      connection.onclose = function (reason, details) {
+
+         console.log("Connection lost: " + reason);
+
+      }
+
+      // now actually open the connection
+      //
+      connection.open();
+
+   </script>
+</body>
+</html>
