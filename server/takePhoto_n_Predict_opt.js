@@ -102,26 +102,28 @@ function main(){
             session.call("io.crossbar.examples.pi.camera.predict").then(
                function (res) {
                   console.log(res);
-                  switch(res.trim()) {
-                       case '0':
-                           result['predict'] = '薊馬'; // black
-                           break;
-                       case '1':
-                           result['predict'] = '蛾類幼蟲'; // moth
-                           break;
-                       case '2':
-                           result['predict'] = '粉蝨'; // pink
-                           break;
-                       case '3':
-                           result['predict'] = '葉蟎紅蜘蛛'; // red
-                           break;
-                       default:
-                           result['predict'] = res;
-                           break;
-                   }
+                 switch(res.trim()) {
+                    case '0':
+                        result['predict'] = '這是薊馬'; // black
+                        break;
+                    case '1':
+                        result['predict'] = '沒有偵測到蟲類'; //leaf
+                        break;
+                    case '2':
+                        result['predict'] = '這是蛾類幼蟲'; // moth
+                        break;
+                    case '3':
+                        result['predict'] = '這是粉蝨'; // pink
+                        break;
+                    case '4':
+                        result['predict'] = '這是葉蟎紅蜘蛛'; // red
+                        break;
+                    default:
+                        result['predict'] = res;
+                        break;
+                }
 
-                  console.log('這是' + result.predict);
-
+                  console.log(result.predict);
                   session.publish("io.crossbar.examples.pi.camera.take_photo_n_predict", [], result);
               },
               function (err) {

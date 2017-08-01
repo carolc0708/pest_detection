@@ -35,7 +35,7 @@ bottleneck_model = Sequential()
 bottleneck_model.add(Flatten(input_shape=features.shape[1:]))
 bottleneck_model.add(Dense(256, activation='relu'))
 bottleneck_model.add(Dropout(0.5))
-bottleneck_model.add(Dense(4, activation='softmax'))
+bottleneck_model.add(Dense(5, activation='softmax'))
 bottleneck_model.load_weights(curdir_path + '/fc_model.h5')
 del img, x, features
 
