@@ -24,61 +24,6 @@ function main(){
         realm: "realm1"
     });
 
-//    var predictPhoto = function (args, kwargs, details) {
-//
-//        console.log("takePicture&predict called");
-//
-//        if (details.progress) {
-//            details.progress(["takePhoto&predict called"]);
-//        }
-//
-//        var predictResult = when.defer();
-//        var result = {};
-//
-//        session.call("io.crossbar.examples.pi.camera.take_photo").then(
-//            function (res) {
-//                result['base64image'] = res;
-//                // need to remove the header and footer which uuencode adds
-//                res = res.slice(29);
-//                res = res.slice(0, -6);
-//
-//                base64_decode(res, curdir + '/copy.jpg');
-//                console.log('Get Photo successfully!')
-//                var cmd = 'python2.7 '+curdir+'/predict.py';
-//                child_process.exec(cmd, function(error, stdout, stderr) {
-//                    // command output is in stdout
-//                    console.log(stdout.trim());
-//                    switch(stdout.trim()) {
-//                        case '0':
-//                            result['predict'] = '薊馬'; // black
-//                            break;
-//                        case '1':
-//                            result['predict'] = '蛾類幼蟲'; // moth
-//                            break;
-//                        case '2':
-//                            result['predict'] = '粉蝨'; // pink
-//                            break;
-//                        case '3':
-//                            result['predict'] = '葉蟎紅蜘蛛'; // red
-//                            break;
-//                        default:
-//                            result['predict'] = stdout;
-//                            break;
-//                    }
-//
-//                    console.log('Predict successfully!');
-//                    predictResult.resolve(result);
-//                });
-//
-//            },
-//            function (err) {
-//                console.log("requestImage failed", err);
-//                imageProgress.innerHTML = "Error getting image!";
-//            }
-//        );
-//
-//        return predictResult.promise;
-//    };
 
     // fired when connection is established and session attached
     //
@@ -130,43 +75,10 @@ function main(){
                  console.log(err);
               }
             );
-//            var cmd = 'python2.7 '+curdir+'/predict.py';
-//            child_process.exec(cmd, function(error, stdout, stderr) {
-//                // command output is in stdout
-//                console.log(stdout.trim());
-//                switch(stdout.trim()) {
-//                    case '0':
-//                        result['predict'] = '薊馬'; // black
-//                        break;
-//                    case '1':
-//                        result['predict'] = '蛾類幼蟲'; // moth
-//                        break;
-//                    case '2':
-//                        result['predict'] = '粉蝨'; // pink
-//                        break;
-//                    case '3':
-//                        result['predict'] = '葉蟎紅蜘蛛'; // red
-//                        break;
-//                    default:
-//                        result['predict'] = stdout;
-//                        break;
-//                }
-//
-//                console.log('這是' + result.predict);
-//
-//                session.publish("io.crossbar.examples.pi.camera.take_photo_n_predict", [], result);
-//            });
+
         }
 
         session.subscribe('io.crossbar.examples.pi.camera.take_photo', getPhoto);
-//        session.register("io.crossbar.examples.pi.camera.take_photo_n_predict", predictPhoto).then(
-//            function (registration) {
-//                console.log("Procedure 'io.crossbar.examples.pi.camera.take_photo_n_predict' registered:", registration.id);
-//            },
-//            function (error) {
-//                console.log("Registration failed:", error);
-//            }
-//        );
 
     };
 
@@ -175,7 +87,6 @@ function main(){
     connection.onclose = function (reason, details) {
 
         console.log("Connection lost: " + reason);
-
     }
 
     connection.open()

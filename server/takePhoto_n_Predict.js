@@ -53,7 +53,7 @@ function main(){
                         result['predict'] = '這是薊馬'; // black
                         break;
                     case '1':
-                        result['predict'] = '沒有偵測到蟲類         '; //leaf
+                        result['predict'] = '沒有偵測到蟲類'; //leaf
                         break;
                     case '2':
                         result['predict'] = '這是蛾類幼蟲'; // moth
